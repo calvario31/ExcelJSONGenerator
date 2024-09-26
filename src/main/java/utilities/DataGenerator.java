@@ -21,6 +21,7 @@ public class DataGenerator {
 
     public static void generateExcel(int n) {
         Logs.info("Generando el Excel");
+        System.out.println("GENERANDO EL EXCEL");
         try {
             final var file = new File(excelPath);
             FileUtils.deleteDirectory(file);
@@ -54,7 +55,7 @@ public class DataGenerator {
 
     public static void generateJsons(int n) {
         Logs.info("Generando los JSON");
-
+        System.out.println("GENERANDO LOS JSONS");
         try {
             final var file = new File("src/main/resources/json");
             FileUtils.deleteDirectory(file);

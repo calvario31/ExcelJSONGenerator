@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class Animal {
+    @JsonProperty("id")
+    private int id;
     @JsonProperty("nombre")
     private final String nombre;
     @JsonProperty("tipo")
@@ -24,16 +26,22 @@ public class Animal {
     public Animal() {
         final var faker = new Faker(new Locale("es-MX"));
 
-        nombre = faker.animal().name();
+        nombre = faker.animal().name().toUpperCase();
         tipo = getRandomTipo();
-        amo = faker.name().name();
+        amo = faker.name().name().toUpperCase();
         edad = faker.number().numberBetween(1, 25);
         peso = faker.number().randomDouble(3, 1, 200);
         genero = getRandomGenero();
     }
 
+    public Animal(int id) {
+        this();
+        this.id = id;
+    }
+
     private static String[] getHeaders() {
         return new String[]{
+                "ID",
                 "NOMBRE",
                 "TIPO",
                 "AMO",
@@ -49,8 +57,9 @@ public class Animal {
 
         array[0] = headers;
         for (var i = 1; i < n; i++) {
-            final var animal = new Animal();
+            final var animal = new Animal(i);
             array[i] = new Object[]{
+                    animal.id,
                     animal.nombre,
                     animal.tipo,
                     animal.amo,
@@ -63,10 +72,10 @@ public class Animal {
         return array;
     }
 
-    public static List<Pokemon> generateJsonData(int n) {
-        final var list = new ArrayList<Pokemon>();
+    public static List<Animal> generateJsonData(int n) {
+        final var list = new ArrayList<Animal>();
         for (var i = 0; i < n; i++) {
-            list.add(new Pokemon());
+            list.add(new Animal(i + 1));
         }
 
         return list;

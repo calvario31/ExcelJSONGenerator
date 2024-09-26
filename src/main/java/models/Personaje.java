@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class Personaje {
+    @JsonProperty("id")
+    private String id;
     @JsonProperty("nombre")
     private final String nombre;
     @JsonProperty("apodo")
@@ -28,18 +30,24 @@ public class Personaje {
     public Personaje() {
         final var faker = new Faker(new Locale("es-MX"));
 
-        nombre = faker.zelda().character();
-        apodo = faker.aquaTeenHungerForce().character();
+        nombre = faker.zelda().character().toUpperCase();
+        apodo = faker.aquaTeenHungerForce().character().toUpperCase();
         edad = faker.number().numberBetween(20, 70);
         nivel = faker.number().numberBetween(1, 100);
         peso = faker.number().randomDouble(2, 70, 100);
-        ubicacion = faker.lordOfTheRings().location();
-        juego = faker.zelda().game();
-        espirituAnimal = getRandomEspirituAnimal();
+        ubicacion = faker.lordOfTheRings().location().toUpperCase();
+        juego = faker.zelda().game().toUpperCase();
+        espirituAnimal = getRandomEspirituAnimal().toUpperCase();
+    }
+
+    public Personaje(int id) {
+        this();
+        this.id = String.format("CRT-%d", id);
     }
 
     private static String[] getHeaders() {
         return new String[]{
+                "ID",
                 "NOMBRE",
                 "APODO",
                 "EDAD",
@@ -57,8 +65,9 @@ public class Personaje {
 
         array[0] = headers;
         for (var i = 1; i < n; i++) {
-            final var personaje = new Personaje();
+            final var personaje = new Personaje(i);
             array[i] = new Object[]{
+                    personaje.id,
                     personaje.nombre,
                     personaje.apodo,
                     personaje.edad,
@@ -76,7 +85,7 @@ public class Personaje {
     public static List<Personaje> generateJsonData(int n) {
         final var list = new ArrayList<Personaje>();
         for (var i = 0; i < n; i++) {
-            list.add(new Personaje());
+            list.add(new Personaje(i));
         }
 
         return list;

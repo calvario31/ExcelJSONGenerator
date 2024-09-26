@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class Pokemon {
+    @JsonProperty("id")
+    private String id;
     @JsonProperty("nombre")
     private final String nombre;
     @JsonProperty("nivel")
@@ -35,7 +37,7 @@ public class Pokemon {
 
     public Pokemon() {
         final var faker = new Faker(new Locale("es-MX"));
-        nombre = faker.pokemon().name();
+        nombre = faker.pokemon().name().toUpperCase();
         nivel = faker.number().numberBetween(1, 100);
         puntosVida = faker.number().numberBetween(10, 350);
         ataque = faker.number().randomDouble(2, 20, 200);
@@ -44,13 +46,19 @@ public class Pokemon {
         defensaEspecial = faker.number().randomDouble(2, 20, 200);
         velocidad = faker.number().randomDouble(2, 20, 200);
         macho = faker.bool().bool();
-        entrenador = faker.name().name();
-        ubicacion = faker.pokemon().location();
+        entrenador = faker.name().name().toUpperCase();
+        ubicacion = faker.pokemon().location().toUpperCase();
         tipo = getRandomTipo();
+    }
+
+    public Pokemon(int id) {
+        this();
+        this.id = String.format("PKM-%d", id);
     }
 
     private static String[] getHeaders() {
         return new String[]{
+                "ID",
                 "NOMBRE",
                 "NIVEL",
                 "HP",
@@ -72,8 +80,9 @@ public class Pokemon {
 
         array[0] = headers;
         for (var i = 1; i < n; i++) {
-            final var pokemon = new Pokemon();
+            final var pokemon = new Pokemon(i);
             array[i] = new Object[]{
+                    pokemon.id,
                     pokemon.nombre,
                     pokemon.nivel,
                     pokemon.puntosVida,
@@ -95,7 +104,7 @@ public class Pokemon {
     public static List<Pokemon> generateJsonData(int n) {
         final var list = new ArrayList<Pokemon>();
         for (var i = 0; i < n; i++) {
-            list.add(new Pokemon());
+            list.add(new Pokemon(i + 1));
         }
 
         return list;

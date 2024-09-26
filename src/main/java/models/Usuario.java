@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class Usuario {
+    @JsonProperty("id")
+    private String id;
     @JsonProperty("nombre")
     private final String nombre;
     @JsonProperty("apellido")
@@ -30,19 +32,25 @@ public class Usuario {
     public Usuario() {
         final var faker = new Faker(new Locale("es-MX"));
 
-        nombre = faker.name().firstName();
-        apellido = faker.name().lastName();
+        nombre = faker.name().firstName().toUpperCase();
+        apellido = faker.name().lastName().toUpperCase();
         edad = faker.number().numberBetween(20, 60);
         peso = faker.number().randomDouble(3, 60, 120);
-        correo = faker.internet().emailAddress();
-        username = faker.name().username();
-        password = faker.internet().password();
-        pais = faker.country().name();
-        universidad = faker.university().name();
+        correo = faker.internet().emailAddress().toUpperCase();
+        username = faker.name().username().toUpperCase();
+        password = faker.internet().password().toUpperCase();
+        pais = faker.country().name().toUpperCase();
+        universidad = faker.university().name().toUpperCase();
+    }
+
+    public Usuario(int id) {
+        this();
+        this.id = String.format("USR-%d", id);
     }
 
     private static String[] getHeaders() {
         return new String[]{
+                "ID",
                 "NOMBRE",
                 "APELLIDO",
                 "EDAD",
@@ -61,8 +69,9 @@ public class Usuario {
 
         array[0] = headers;
         for (var i = 1; i < n; i++) {
-            final var persona = new Usuario();
+            final var persona = new Usuario(i);
             array[i] = new Object[]{
+                    persona.id,
                     persona.nombre,
                     persona.apellido,
                     persona.edad,
@@ -81,7 +90,7 @@ public class Usuario {
     public static List<Usuario> generateJsonData(int n) {
         final var list = new ArrayList<Usuario>();
         for (var i = 0; i < n; i++) {
-            list.add(new Usuario());
+            list.add(new Usuario(i + 1));
         }
 
         return list;

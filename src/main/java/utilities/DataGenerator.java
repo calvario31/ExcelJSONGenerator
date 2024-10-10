@@ -1,5 +1,6 @@
 package utilities;
 
+import models.Alumno;
 import models.Animal;
 import models.Personaje;
 import models.Pokemon;
@@ -50,6 +51,9 @@ public class DataGenerator {
         Logs.info("Escribiendo pestaña de animales");
         ExcelWriter.writeExcelSheet(workbook, Animal.generateExcelData(n), "animales");
 
+        Logs.info("Escribiendo pestaña de alumnos");
+        ExcelWriter.writeExcelSheet(workbook, Alumno.generateExcelData(n), "alumnos");
+
         ExcelWriter.writeData(workbook, generateExcelPath());
     }
 
@@ -72,6 +76,7 @@ public class DataGenerator {
         final var listPokemon = Pokemon.generateJsonData(n);
         final var listaAnimal = Animal.generateJsonData(n);
         final var listaPersonaje = Personaje.generateJsonData(n);
+        final var listaAlumno = Alumno.generateJsonData(n);
 
         Logs.info("Escribiendo JSON de usuarios");
         JsonWriter.writeJson(listaUsuario, generateJsonPath("usuarios"));
@@ -84,6 +89,9 @@ public class DataGenerator {
 
         Logs.info("Escribiendo JSON de personajes");
         JsonWriter.writeJson(listaPersonaje, generateJsonPath("personajes"));
+
+        Logs.info("Escribiendo JSON de alumnos");
+        JsonWriter.writeJson(listaAlumno, generateJsonPath("alumnos"));
     }
 
     private static String generateJsonPath(String name) {

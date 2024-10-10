@@ -2,10 +2,10 @@ package models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.javafaker.Faker;
+import utilities.Generals;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class Usuario {
     @JsonProperty("id")
@@ -19,7 +19,7 @@ public class Usuario {
     @JsonProperty("peso")
     private final double peso;
     @JsonProperty("email")
-    private final String correo;
+    private final String email;
     @JsonProperty("username")
     private final String username;
     @JsonProperty("password")
@@ -30,13 +30,13 @@ public class Usuario {
     private final String universidad;
 
     public Usuario() {
-        final var faker = new Faker(new Locale("es-MX"));
+        final var faker = new Faker();
 
         nombre = faker.name().firstName().toUpperCase();
         apellido = faker.name().lastName().toUpperCase();
         edad = faker.number().numberBetween(20, 60);
         peso = faker.number().randomDouble(3, 60, 120);
-        correo = faker.internet().emailAddress().toUpperCase();
+        email = Generals.getRandomEmail(nombre, apellido);
         username = faker.name().username().toUpperCase();
         password = faker.internet().password().toUpperCase();
         pais = faker.country().name().toUpperCase();
@@ -55,7 +55,7 @@ public class Usuario {
                 "APELLIDO",
                 "EDAD",
                 "PESO",
-                "CORREO",
+                "EMAIL",
                 "USERNAME",
                 "PASSWORD",
                 "PAIS",
@@ -69,18 +69,18 @@ public class Usuario {
 
         array[0] = headers;
         for (var i = 1; i < n; i++) {
-            final var persona = new Usuario(i);
+            final var usuario = new Usuario(i);
             array[i] = new Object[]{
-                    persona.id,
-                    persona.nombre,
-                    persona.apellido,
-                    persona.edad,
-                    persona.peso,
-                    persona.correo,
-                    persona.username,
-                    persona.password,
-                    persona.pais,
-                    persona.universidad
+                    usuario.id,
+                    usuario.nombre,
+                    usuario.apellido,
+                    usuario.edad,
+                    usuario.peso,
+                    usuario.email,
+                    usuario.username,
+                    usuario.password,
+                    usuario.pais,
+                    usuario.universidad
             };
         }
 

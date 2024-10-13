@@ -37,24 +37,24 @@ public class DataGenerator {
 
         final var workbook = new XSSFWorkbook();
 
-        ExcelWriter.initHeaderStyle(workbook);
+        ExcelWriterGeneric.initHeaderStyle(workbook);
 
         Logs.info("Escribiendo pestaña de usuarios");
-        ExcelWriter.writeExcelSheet(workbook, Usuario.generateExcelData(n), "usuarios");
+        ExcelWriterGeneric.writeExcelSheet(workbook, Usuario.generateExcelData(n), "usuarios");
 
         Logs.info("Escribiendo pestaña de pokemons");
-        ExcelWriter.writeExcelSheet(workbook, Pokemon.generateExcelData(n), "pokemons");
+        ExcelWriterGeneric.writeExcelSheet(workbook, Pokemon.generateExcelData(n), "pokemons");
 
         Logs.info("Escribiendo pestaña de personajes");
-        ExcelWriter.writeExcelSheet(workbook, Personaje.generateExcelData(n), "personajes");
+        ExcelWriterGeneric.writeExcelSheet(workbook, Personaje.generateExcelData(n), "personajes");
 
         Logs.info("Escribiendo pestaña de animales");
-        ExcelWriter.writeExcelSheet(workbook, Animal.generateExcelData(n), "animales");
+        ExcelWriterGeneric.writeExcelSheet(workbook, Animal.generateExcelData(n), "animales");
 
         Logs.info("Escribiendo pestaña de alumnos");
-        ExcelWriter.writeExcelSheet(workbook, Alumno.generateExcelData(n), "alumnos");
+        ExcelWriterGeneric.writeExcelSheet(workbook, Alumno.generateExcelData(n), "alumnos");
 
-        ExcelWriter.writeData(workbook, generateExcelPath());
+        ExcelWriterGeneric.writeData(workbook, generateExcelPath());
     }
 
     public static void generateJsons(int n) {

@@ -1,81 +1,65 @@
 package utilities;
 
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
-import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.awt.*;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class ExcelWriter {
-    private static XSSFCellStyle headerStyle;
-    private static int rows;
-    private static int columns;
+    private static final String excelPath = "src/main/resources/excel/data.xlsx";
+    private static final String newExcelPath = "src/main/resources/excel/new.xlsx";
 
-    public static void writeExcelSheet(XSSFWorkbook workbook, Object[][] data, String sheetName) {
-        final var sheet = workbook.createSheet(sheetName);
-
-        rows = data.length;
-        columns = data[0].length;
-
-        writeHeaders(sheet, data[0]);
-        writeContent(sheet, data);
-        fixWidth(sheet);
-    }
-
-    public static void writeData(XSSFWorkbook workbook, String path) {
+    private static XSSFWorkbook getWorkbook() {
         try {
-            final var fileOutputStream = new FileOutputStream(path);
-            workbook.write(fileOutputStream);
-            fileOutputStream.close();
+            return new XSSFWorkbook(excelPath);
         } catch (IOException ioException) {
-            ioException.fillInStackTrace();
+            Logs.error("Error al leer del excel");
+            throw new RuntimeException();
         }
     }
 
-    public static void initHeaderStyle(XSSFWorkbook workbook) {
-        headerStyle = workbook.createCellStyle();
-
-        final var font = workbook.createFont();
-        font.setBold(true);
-
-        final var color = new XSSFColor(Color.YELLOW, null);
-
-        headerStyle.setFont(font);
-        headerStyle.setFillForegroundColor(color);
-        headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        headerStyle.setAlignment(HorizontalAlignment.CENTER);
+    public static void writeData(String sheetName, String[] headers, Object[][] data) {
+        final var workbook = getWorkbook();
+        final var sheet = workbook.createSheet(sheetName);
+        writeHeaders(sheet, headers);
+        writeContent(sheet, data);
+        fixWidth(sheet, data[0].length);
+        writeWorkbookToExcel(workbook);
     }
 
-    private static void writeHeaders(XSSFSheet sheet, Object[] headers) {
-        final var headerRow = sheet.createRow(0);
-        for (var j = 0; j < columns; j++) {
-            final var cell = headerRow.createCell(j);
-            cell.setCellValue((String) headers[j]);
-            cell.setCellStyle(headerStyle);
+    public static void writeWorkbookToExcel(XSSFWorkbook workbook) {
+        try {
+            final var fileOutputStream = new FileOutputStream(newExcelPath);
+            workbook.write(fileOutputStream);
+            fileOutputStream.close();
+        } catch (IOException ioException) {
+            Logs.error("IOException: %s", ioException.getLocalizedMessage());
+        }
+    }
+
+    private static void writeHeaders(XSSFSheet sheet, String[] headers) {
+        final var row = sheet.createRow(0);
+        final var n = headers.length;
+
+        for (var i = 0; i < n; i++) {
+            row.createCell(i).setCellValue(headers[i]);
         }
     }
 
     private static void writeContent(XSSFSheet sheet, Object[][] content) {
-        for (var i = 1; i < rows; i++) {
-            final var newRow = sheet.createRow(i);
+        final var rows = content.length;
+        final var columns = content[0].length;
+
+        for (var i = 0; i < rows; i++) {
+            final var newRow = sheet.createRow(i + 1);
             final var dataRow = content[i];
 
             for (var j = 0; j < columns; j++) {
                 final var cell = newRow.createCell(j);
                 writeSingleData(dataRow[j], cell);
             }
-        }
-    }
-
-    private static void fixWidth(XSSFSheet sheet) {
-        for (var i = 0; i < columns; i++) {
-            sheet.autoSizeColumn(i);
         }
     }
 
@@ -88,6 +72,12 @@ public class ExcelWriter {
             cell.setCellValue((double) value);
         } else if (value.getClass() == Boolean.class) {
             cell.setCellValue((boolean) value);
+        }
+    }
+
+    private static void fixWidth(XSSFSheet sheet, int columns) {
+        for (var i = 0; i < columns; i++) {
+            sheet.autoSizeColumn(i);
         }
     }
 }

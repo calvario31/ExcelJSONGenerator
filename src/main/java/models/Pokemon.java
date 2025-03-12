@@ -5,7 +5,6 @@ import com.github.javafaker.Faker;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class Pokemon {
     @JsonProperty("id")
@@ -36,7 +35,7 @@ public class Pokemon {
     private final String tipo;
 
     public Pokemon() {
-        final var faker = new Faker(new Locale("es-MX"));
+        final var faker = new Faker();
         nombre = faker.pokemon().name().toUpperCase();
         nivel = faker.number().numberBetween(1, 100);
         puntosVida = faker.number().numberBetween(10, 350);
@@ -46,7 +45,7 @@ public class Pokemon {
         defensaEspecial = faker.number().randomDouble(2, 20, 200);
         velocidad = faker.number().randomDouble(2, 20, 200);
         macho = faker.bool().bool();
-        entrenador = faker.name().name().toUpperCase();
+        entrenador = faker.name().fullName().toUpperCase();
         ubicacion = faker.pokemon().location().toUpperCase();
         tipo = getRandomTipo();
     }

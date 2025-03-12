@@ -5,7 +5,6 @@ import com.github.javafaker.Faker;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class Animal {
     @JsonProperty("id")
@@ -24,7 +23,7 @@ public class Animal {
     private final String genero;
 
     public Animal() {
-        final var faker = new Faker(new Locale("es-MX"));
+        final var faker = new Faker();
 
         nombre = faker.animal().name().toUpperCase();
         tipo = getRandomTipo();

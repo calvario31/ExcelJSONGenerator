@@ -5,7 +5,6 @@ import com.github.javafaker.Faker;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class Personaje {
     @JsonProperty("id")
@@ -28,7 +27,7 @@ public class Personaje {
     private final String espirituAnimal;
 
     public Personaje() {
-        final var faker = new Faker(new Locale("es-MX"));
+        final var faker = new Faker();
 
         nombre = faker.zelda().character().toUpperCase();
         apodo = faker.aquaTeenHungerForce().character().toUpperCase();

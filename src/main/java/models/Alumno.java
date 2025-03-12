@@ -24,6 +24,8 @@ public class Alumno {
     private final String curso;
     @JsonProperty("lenguajeProgramacion")
     private final String lenguajeProgramacion;
+    @JsonProperty("nota")
+    private final int nota;
 
     public Alumno() {
         final var faker = new Faker();
@@ -35,6 +37,7 @@ public class Alumno {
         pais = getRandomPais();
         curso = getRandomCurso();
         lenguajeProgramacion = getRandomLenguajeProgramacion();
+        nota = faker.number().numberBetween(1, 20);
     }
 
     public Alumno(int id) {
@@ -51,7 +54,8 @@ public class Alumno {
                 "EMAIL",
                 "PAIS",
                 "CURSO",
-                "LENGUAJE DE PROGRAMACION"
+                "LENGUAJE DE PROGRAMACION",
+                "NOTA"
         };
     }
 
@@ -70,7 +74,8 @@ public class Alumno {
                     alumno.email,
                     alumno.pais,
                     alumno.curso,
-                    alumno.lenguajeProgramacion
+                    alumno.lenguajeProgramacion,
+                    alumno.nota
             };
         }
 

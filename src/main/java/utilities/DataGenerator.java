@@ -2,9 +2,11 @@ package utilities;
 
 import models.Alumno;
 import models.Animal;
+import models.Participante;
 import models.Personaje;
 import models.Pokemon;
 import models.Usuario;
+import models.Vector2D;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -54,6 +56,12 @@ public class DataGenerator {
         Logs.info("Escribiendo pestaña de alumnos");
         ExcelWriter.writeExcelSheet(workbook, Alumno.generateExcelData(n), "alumnos");
 
+        Logs.info("Escribiendo pestaña de participantes");
+        ExcelWriter.writeExcelSheet(workbook, Participante.generateExcelData(n), "participantes");
+
+        Logs.info("Escribiendo pestaña de vectores");
+        ExcelWriter.writeExcelSheet(workbook, Vector2D.generateExcelData(n), "vectores");
+
         ExcelWriter.writeData(workbook, generateExcelPath());
     }
 
@@ -77,6 +85,8 @@ public class DataGenerator {
         final var listaAnimal = Animal.generateJsonData(n);
         final var listaPersonaje = Personaje.generateJsonData(n);
         final var listaAlumno = Alumno.generateJsonData(n);
+        final var listaParticipante = Participante.generateJsonData(n);
+        final var listaVector = Vector2D.generateJsonData(n);
 
         Logs.info("Escribiendo JSON de usuarios");
         JsonWriter.writeJson(listaUsuario, generateJsonPath("usuarios"));
@@ -92,6 +102,12 @@ public class DataGenerator {
 
         Logs.info("Escribiendo JSON de alumnos");
         JsonWriter.writeJson(listaAlumno, generateJsonPath("alumnos"));
+
+        Logs.info("Escribiendo JSON de participantes");
+        JsonWriter.writeJson(listaParticipante, generateJsonPath("participantes"));
+
+        Logs.info("Escribiendo JSON de vectores");
+        JsonWriter.writeJson(listaVector, generateJsonPath("vectores"));
     }
 
     private static String generateJsonPath(String name) {
